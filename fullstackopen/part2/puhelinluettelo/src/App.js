@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Persons from './components/Persons'
 
 const App = () => {
   // State handlers
@@ -53,16 +54,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
       <div>filter shown with <input onChange={handleFilter} /></div>
+
       <form onSubmit={addName}>
           <div>name: <input value={newName} onChange={handleNameAdd} /></div>
           <div>number: <input value={newNumber} onChange={handleNumberAdd} /></div>
           <button type="submit">add</button>
       </form>
-      <h2>Numbers</h2>
-      {persons
-        .filter(person => person.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 )
-        .map( person => <p key={person.name}>{person.name} {person.number}</p>)}
+
+      <h3>Numbers</h3>
+      
+      <Persons persons={persons} filter={filter}></Persons>
+        
     </div>
   )
 
