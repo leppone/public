@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
-import axios from 'axios'
+import nameService from './services/names'
 
 const App = () => {
   // State handlers
@@ -9,40 +9,26 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filter, setFilter ] = useState('')
 
-  useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-  }, [])
-  console.log('render', persons.length, 'persons')
-
   // Internal functions
   function addName(event) {
+    // Prevent default behavior of submit (page reload)
     event.preventDefault()
 
-    console.log("name to be added: ", newName)
     var person = persons.find(p => console.log("existing item : ", p.name) || p.name.toLowerCase() === newName.toLowerCase())
-    console.log("found entry: ", person)
-
     if( person !== undefined ) {
       window.alert(`${newName} is already added to phonebook`)
       return
     }
     
-    const nameObject = {
-      name: newName,
-      number: newNumber
-    }
-    
-    setPersons(persons.concat(nameObject))
-    setNewName('')
-    setNewNumber('')
+    const nameObject = { name: newName, number: newNumber }    
+    nameService
+      .create(nameObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
   }
-
 
   // Event handlers
   const handleNameAdd = (event) => {
@@ -58,6 +44,15 @@ const App = () => {
   }
 
   // "Main"
+  useEffect(() => {
+    nameService
+      .getAll()
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
+
   return (
     <div>
       <h2>Phonebook</h2>
