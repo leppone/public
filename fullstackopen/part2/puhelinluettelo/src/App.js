@@ -73,7 +73,7 @@ const App = () => {
   console.log('render', persons.length, 'persons')
 
   return (
-    <Ui persons={persons} addName={addPerson} removeName={removePerson} errorMessage={infoMessage}></Ui>
+    <Ui persons={persons} addName={addPerson} removeName={removePerson} infoMessage={infoMessage}></Ui>
   )
 
 }

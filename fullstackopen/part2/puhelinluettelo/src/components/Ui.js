@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import Person from './Person'
 import Notification from './Notification'
 
-const Ui = ({persons, addName, removeName, errorMessage: infoMessage}) => {
+const Ui = ({persons, addName, removeName, infoMessage}) => {
   // Statehandlers
   const [ filter, setFilter ] = useState('')
   const [ newName, setNewName ] = useState('')
