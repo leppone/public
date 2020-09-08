@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import Person from './Person'
 
-const Ui = ({persons, addName, removeName}) => {
+const Ui = ({persons, addName, removeName }) => {
   // Statehandlers
   const [ filter, setFilter ] = useState('')
   const [ newName, setNewName ] = useState('')
@@ -19,11 +19,6 @@ const Ui = ({persons, addName, removeName}) => {
   const handleNumberAdd = (event) => {
     setNewNumber(event.target.value)
   }
-
-// // // // //   const clearForm = () => {
-// // // // //       setNewName('')
-// // // // //       setNewNumber('')
-// // // // //   }
 
   return (
     <div>
