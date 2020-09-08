@@ -1,10 +1,12 @@
+import './index.css'
 import React, { useState, useEffect } from 'react'
 import Ui from './components/Ui'
 import nameService from './services/names'
 
 const App = () => {
   // State handlers
-  const [ persons, setPersons] = useState([]) 
+  const [ persons, setPersons] = useState([])
+  const [ infoMessage, setInfoMessage ] = useState(null)
 
   // Event handlers
   const addPerson = (event, newName, newNumber) => {
@@ -24,7 +26,7 @@ const App = () => {
     nameService
       .create(nameObject)
       .then(response => {
-        console.log("service response: ", response)
+        handleInfoTextBox(`Added ${newName}`)
         setPersons(persons.concat(response.data))
       })
   }
@@ -35,7 +37,7 @@ const App = () => {
     nameService
       .update(id, nameObject)
       .then(response => {
-        console.log(response)
+        handleInfoTextBox(`Updated ${name}`)
         setPersons(persons.map(p => p.id !== id ? p : response))
       })
   }
@@ -46,10 +48,18 @@ const App = () => {
       nameService
         .remove(id)
         .then(response => {
-          console.log("service response: ", response)
+          handleInfoTextBox(`Removed ${name}`)
           setPersons(persons.filter(person => person.id !== id))
         })
     }
+  }
+
+  // Internal functions
+  const handleInfoTextBox = (message) => {
+    setInfoMessage ( message )
+    setTimeout(() => {
+      setInfoMessage(null)
+    }, 5000)
   }
 
   // "Main"
@@ -63,7 +73,7 @@ const App = () => {
   console.log('render', persons.length, 'persons')
 
   return (
-    <Ui persons={persons} addName={addPerson} removeName={removePerson}></Ui>
+    <Ui persons={persons} addName={addPerson} removeName={removePerson} errorMessage={infoMessage}></Ui>
   )
 
 }

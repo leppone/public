@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
 import Person from './Person'
+import Notification from './Notification'
 
-const Ui = ({persons, addName, removeName }) => {
+const Ui = ({persons, addName, removeName, errorMessage: infoMessage}) => {
   // Statehandlers
   const [ filter, setFilter ] = useState('')
   const [ newName, setNewName ] = useState('')
@@ -24,7 +25,11 @@ const Ui = ({persons, addName, removeName }) => {
     <div>
       <h2>Phonebook</h2>
 
+      <Notification message={infoMessage} />
+
       <div>filter shown with <input onChange={handleFilter} /></div>
+
+      <h2>Add a new</h2>
 
       <form onSubmit={(event) => addName(event, newName, newNumber)}>
           <div>name: <input value={newName} onChange={handleNameAdd} /></div>
