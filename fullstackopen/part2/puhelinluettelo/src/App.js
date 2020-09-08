@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import Persons from './components/Persons'
+import Ui from './components/Ui'
 import nameService from './services/names'
 
 const App = () => {
   // State handlers
   const [ persons, setPersons] = useState([]) 
-  const [ newName, setNewName ] = useState('')
-  const [ newNumber, setNewNumber ] = useState('')
-  const [ filter, setFilter ] = useState('')
 
-  // Internal functions
-  function addName(event) {
+  // Event handlers
+  const addName = (event, newName, newNumber) => {
     // Prevent default behavior of submit (page reload)
     event.preventDefault()
 
@@ -24,23 +21,21 @@ const App = () => {
     nameService
       .create(nameObject)
       .then(response => {
+        console.log("service response: ", response)
         setPersons(persons.concat(response.data))
-        setNewName('')
-        setNewNumber('')
       })
   }
 
-  // Event handlers
-  const handleNameAdd = (event) => {
-    setNewName(event.target.value)
-  }
-
-  const handleNumberAdd = (event) => {
-    setNewNumber(event.target.value)
-  }
-
-  const handleFilter = (event) => {
-    setFilter(event.target.value)
+  const removeName = (id, name) => {
+    console.log(`call remove for: /persons/${id} (${name})` )
+    if( window.confirm(`Delete ${name}?`) ) {
+      nameService
+        .remove(id)
+        .then(response => {
+          console.log("service response: ", response)
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
   }
 
   // "Main"
@@ -54,22 +49,7 @@ const App = () => {
   console.log('render', persons.length, 'persons')
 
   return (
-    <div>
-      <h2>Phonebook</h2>
-
-      <div>filter shown with <input onChange={handleFilter} /></div>
-
-      <form onSubmit={addName}>
-          <div>name: <input value={newName} onChange={handleNameAdd} /></div>
-          <div>number: <input value={newNumber} onChange={handleNumberAdd} /></div>
-          <button type="submit">add</button>
-      </form>
-
-      <h3>Numbers</h3>
-      
-      <Persons persons={persons} filter={filter}></Persons>
-        
-    </div>
+    <Ui persons={persons} addName={addName} removeName={removeName}></Ui>
   )
 
 }
