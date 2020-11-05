@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+# Solarflares app
+
+A test app created with node.js and React. After npm dependencies are ok the app can be started with a single command `npm run dev`.  Optionally you can follow the default instructions below:  
+
+
+
+Default readme-notes below:
+
+------------------
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

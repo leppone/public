@@ -10,7 +10,7 @@ app.get('/api/solarflares', (req, res) => {
 
   // api key to env vars?
   // https://www.twilio.com/blog/react-app-with-node-js-server-proxy
-  var url = `https://api.nasa.gov/DONKI/FLR?startDate=${year}-01-01&endDate=${year}-12-31&api_key=QWOCvYG2Y6S4QSFtVQu5k1nUoZJCiwWSnxAe5mg6`;
+  var url = `https://api.nasa.gov/DONKI/FLR?startDate=${year}-01-01&endDate=${year}-12-31&api_key=DEMO_KEY`;
   console.log(`[INFO] -- Setting up container for solar flares data using url: ${url}`)
 
   fetch(url)
