@@ -17,7 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node services\\flareController.js",
+    "server": "nodemon services\\flareController.js",
     "dev": "run-p server start"
   },
   "proxy": "http://localhost:3001",

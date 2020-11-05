@@ -1,34 +1,63 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './App.css';
 
 const App = () => {
-  // State hooks
-  const [flares, setFlares] = useState([])
 
-  // Event handlers
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  // ---- State hooks 
+  const [mostFlaresRegion, setTopRegion] = useState("-");
+  const [mostCommonType, setTopFlare] = useState("-");
 
-    // Fetch flare data from "server" 
-    // -- COULD CALL SOME MORE SPECIFIC FUNCTION, BUSINESS LOGIC, THAT ACTUALLY CALLS THE SERVER
-    fetch(`/api/solarflares`)
+
+  // ---- Effect hooks
+  useEffect(() => {
+    // Fetch flare data from "server" - redirect through proxy defined in package.json
+    fetch('/api/solarflares')
       .then(response => response.json())
-      .then(flarelist => setFlares(flarelist));
+      .then(flarelist => {
+        // Once received, call event handler for page rendering
+        updateStates(flarelist);
+      });
+  }, [])
+
+
+  // ---- Event handlers
+  const updateStates = (flares) => {
+
+    // If flares empty, server call not finished
+    if(flares !== undefined && flares.length !== 0)
+    {
+      let listed = flares
+        .reduce( (count, flare) => {
+          count[flare.activeRegionNum] = (count[flare.activeRegionNum] || 0) + 1
+          return count;
+        }, {});
+
+      let topFlare = Object.keys(listed).reduce((a, b) => listed[a] > listed[b] ? a : b);
+
+      setTopRegion(topFlare);
+
+      // ----------- Awful, unify these -------------
+
+      let classtypes = flares
+        .reduce( (count, flare) => {
+          count[flare.classType] = ( count[flare.classType] || 0) + 1
+          return count;
+        }, {});
+
+      let toppen = Object.keys(classtypes).reduce((a, b) => classtypes[a].count > classtypes[b].count ? a : b);
+      
+      setTopFlare(toppen);
+    }
   }
+
+  // ---- Render part
 
   return (
     <div className="App">
       <header className="App-header">
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="name">Find out how many flares in 2016: </label>
-            <button type="submit">Submit</button>
-          </form>
-          
-          {flares
-            .map((flare) =>
-            <p key={flare.id}>{flare.sourceLocation} {flare.activeRegionNum}</p>
-          )}
-          
+          <h1 htmlFor="name">Solar flare winners 2016: </h1>
+          <p> Regions with the most solar flares: {mostFlaresRegion}</p>
+          <p> The most common class type of solar flare: {mostCommonType}</p>
       </header>
     </div>
   );
