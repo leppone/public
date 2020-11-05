@@ -3,14 +3,14 @@ import './App.css';
 
 const App = () => {
 
-  // ---- State hooks 
+  // ---- State hooks ----
   const [mostFlaresRegion, setTopRegion] = useState("-");
   const [mostCommonType, setTopFlare] = useState("-");
 
 
-  // ---- Effect hooks
+  // ---- Effect hooks ----
   useEffect(() => {
-    // Fetch flare data from "server" - redirect through proxy defined in package.json
+    // Fetch flare data from "server" - redirect-proxy defined in package.json
     fetch('/api/solarflares')
       .then(response => response.json())
       .then(flarelist => {
@@ -20,37 +20,50 @@ const App = () => {
   }, [])
 
 
-  // ---- Event handlers
+  // ---- Helper functions ----
+  const groupByCounter = (objectArray, property) => {
+    // Group & count list by given property
+    return objectArray.reduce( (count, obj) => {
+      let key = obj[property];
+      count[key] = (count[key] || 0) + 1;
+      return count;
+    }, {});
+  }
+    
+  const topValuesArray = (groupList) => {
+    // Biggest value(s) in list
+    let maxValue = Math.max(...Object.values(groupList));
+    
+    // Create array of all items having maxValue
+    let array = Object.keys(groupList).reduce((bigOnes, item) => {
+      if(item !== "null" && groupList[item] >= maxValue) {
+        bigOnes.push(item);
+      }
+      return bigOnes;
+    }, []);
+
+    return array;
+  }
+
+
+  // ---- Event handlers ----
   const updateStates = (flares) => {
 
     // If flares empty, server call not finished
     if(flares !== undefined && flares.length !== 0)
     {
-      let listed = flares
-        .reduce( (count, flare) => {
-          count[flare.activeRegionNum] = (count[flare.activeRegionNum] || 0) + 1
-          return count;
-        }, {});
+      let regionsGrouped = groupByCounter(flares, 'activeRegionNum');
+      let flareTypesGrouped = groupByCounter(flares, 'classType');
 
-      let topFlare = Object.keys(listed).reduce((a, b) => listed[a] > listed[b] ? a : b);
+      let topRegionsStr = topValuesArray(regionsGrouped).join();
+      let topFlareTypesStr = topValuesArray(flareTypesGrouped).join();
 
-      setTopRegion(topFlare);
-
-      // ----------- Awful, unify these -------------
-
-      let classtypes = flares
-        .reduce( (count, flare) => {
-          count[flare.classType] = ( count[flare.classType] || 0) + 1
-          return count;
-        }, {});
-
-      let toppen = Object.keys(classtypes).reduce((a, b) => classtypes[a].count > classtypes[b].count ? a : b);
-      
-      setTopFlare(toppen);
+      setTopRegion(topRegionsStr);
+      setTopFlare(topFlareTypesStr);
     }
   }
 
-  // ---- Render part
+  // ---- Render part ----
 
   return (
     <div className="App">
