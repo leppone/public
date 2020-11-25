@@ -13,11 +13,22 @@ const App = () => {
     // Fetch flare data from "server" - redirect-proxy defined in package.json
     fetch('/api/solarflares')
       .then(response => response.json())
-      .then(flarelist => {
-        // Once received, call event handler for page rendering
-        updateStates(flarelist);
+      .then(flares => {
+        // Once received, render page
+        // If flares empty, server call not finished
+        if(flares !== undefined && flares.length !== 0)
+        {
+          let regionsGrouped = groupByCounter(flares, 'activeRegionNum');
+          let flareTypesGrouped = groupByCounter(flares, 'classType');
+
+          let topRegionsStr = topValuesArray(regionsGrouped).join();
+          let topFlareTypesStr = topValuesArray(flareTypesGrouped).join();
+
+          setTopRegion(topRegionsStr);
+          setTopFlare(topFlareTypesStr);
+        }
       });
-  }, [])
+  },)
 
 
   // ---- Helper functions ----
@@ -33,35 +44,13 @@ const App = () => {
   const topValuesArray = (groupList) => {
     // Biggest value(s) in list
     let maxValue = Math.max(...Object.values(groupList));
-    
-    // Create array of all items having maxValue
-    let array = Object.keys(groupList).reduce((bigOnes, item) => {
-      if(item !== "null" && groupList[item] >= maxValue) {
-        bigOnes.push(item);
-      }
-      return bigOnes;
-    }, []);
 
-    return array;
+    // Return array of all items having maxValue
+    return Object.keys(groupList).filter((item) => {
+      return groupList[item] >= maxValue;
+    });
   }
 
-
-  // ---- Event handlers ----
-  const updateStates = (flares) => {
-
-    // If flares empty, server call not finished
-    if(flares !== undefined && flares.length !== 0)
-    {
-      let regionsGrouped = groupByCounter(flares, 'activeRegionNum');
-      let flareTypesGrouped = groupByCounter(flares, 'classType');
-
-      let topRegionsStr = topValuesArray(regionsGrouped).join();
-      let topFlareTypesStr = topValuesArray(flareTypesGrouped).join();
-
-      setTopRegion(topRegionsStr);
-      setTopFlare(topFlareTypesStr);
-    }
-  }
 
   // ---- Render part ----
 
