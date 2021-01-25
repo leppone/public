@@ -1,0 +1,19 @@
+{
+  "scoreboard": [
+    {
+      "name": "Luke Skywalker",
+      "score": "123456",
+      "id": 1
+    },
+    {
+      "name": "Darth Vader",
+      "score": "5323523",
+      "id": 2
+    },
+    {
+      "name": "Boba Fett",
+      "score": "234345",
+      "id": 3
+    }   
+  ]
+}
