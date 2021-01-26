@@ -24,12 +24,21 @@ const AddScoreButton = ({
     // Prevent default behavior of submit (page reload)
     event.preventDefault();
 
-    const nameObject = { name: newName, score: newScore };
     scoreboardService
-      .create(nameObject)
+      .create({ name: newName, score: newScore })
       .then(response => {
         handleInfoBox(`Added ${newName}`);
-        setScores(scores.concat(response.data));
+        
+        // Add new item to sorted scoreboard to correct place 
+        let scoresClone = [...scores];
+        let idxForSplice = scores.findIndex(
+          (item) => Number(item.score) < Number(response.data.score));
+        scoresClone.splice(
+          idxForSplice < 0 ? scores.length : idxForSplice,
+          0,
+          response.data
+        );
+        setScores(scoresClone);
       });
   }
 
