@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import Table from 'react-bootstrap/Table'
-import EntryRow from '../components/EntryRow'
-import AddScoreButton from '../components/AddScoreButton'
+import React, { useState, useEffect } from 'react';
+import Table from 'react-bootstrap/Table';
+import EntryRow from '../components/EntryRow';
+import AddScoreButton from '../components/AddScoreButton';
 
-import scoreboardService from '../services/scoreboardService'
+import scoreboardService from '../services/scoreboardService';
 
 
-const Scoreboard = () => {
+const Scoreboard = ({
+    // Params
+    // {handleInfoBox} : feedback for user
+    handleInfoBox
+}) => {
 
   // --- States ---
-  const [ scores, setScores] = useState([])
+  const [ scores, setScores] = useState([]);
 
 
   // --- Effect handlers ---
@@ -18,10 +22,10 @@ const Scoreboard = () => {
     scoreboardService
       .getAll()
       .then(response => {
-        setScores(response.data)
+        setScores(response.data);
       })
-  }, [])
-  console.log('render', scores.length, 'scores')
+  }, []);
+  console.log('render', scores.length, 'scores');
 
 
   // --- Component content ---  
@@ -53,8 +57,9 @@ const Scoreboard = () => {
             ))}
 
             <AddScoreButton 
-                scores={scores} 
+                scores={scores}
                 setScores={setScores}
+                handleInfoBox={handleInfoBox}
             />
 
           </tbody>

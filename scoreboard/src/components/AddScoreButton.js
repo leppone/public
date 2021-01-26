@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button'
-import EntryForm from './EntryForm'
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import EntryForm from './EntryForm';
 
-import scoreboardService from '../services/scoreboardService'
+import scoreboardService from '../services/scoreboardService';
 
-// --- Component <AddScoreButton> ---
+
 const AddScoreButton = ({
   // Params
   // {scores} : state for score container
   // {setScores} : setter for state
+  // {handleInfoBox} : feedback for user
   scores, 
-  setScores
+  setScores,
+  handleInfoBox
 }) => {
 
   // --- States ---
@@ -26,15 +28,16 @@ const AddScoreButton = ({
     scoreboardService
       .create(nameObject)
       .then(response => {
-        // handleInfoTextBox(`Added ${newName}`)
-        setScores(scores.concat(response.data))
+        handleInfoBox(`Added ${newName}`);
+        setScores(scores.concat(response.data));
       });
   }
 
 
   // --- Component helper functions ---
+  // Revert formMode boolean
   const changeFormMode = () => {
-    setFormMode(true);
+    setFormMode(!formMode);
   }
 
 
@@ -54,7 +57,9 @@ const AddScoreButton = ({
             // If formMode not on, show button
             <tr>
                 <td colSpan="3">
-                    <EntryForm addScore={addScore} />
+                    <EntryForm 
+                      addScore={addScore} 
+                      changeFormMode={changeFormMode} />
                 </td>
             </tr>
         }

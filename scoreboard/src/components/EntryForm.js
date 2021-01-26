@@ -1,31 +1,39 @@
-import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button' 
-import Form from 'react-bootstrap/Form'
-import Col from 'react-bootstrap/Col'
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 
 
 const EntryForm = ({
     // Params
     // {addScore} : event handler for adding score
-    addScore
+    // {changeFormMode} : event handler for adding score
+    addScore,
+    changeFormMode
 }) => {
 
     // --- States ---
-    const [ newName, setNewName ] = useState('')
-    const [ newScore, setNewScore ] = useState(0)
+    const [ newName, setNewName ] = useState('');
+    const [ newScore, setNewScore ] = useState(0);
+
 
     // --- Event handlers ---
     const handleNameAdd = (event) => {
-        setNewName(event.target.value)
-    }
+        setNewName(event.target.value);
+    };
     
     const handleNumberAdd = (event) => {
-        setNewScore(event.target.value)
-    }
+        setNewScore(event.target.value);
+    };
+
+    const handleButtonClick = (event) => {
+        addScore(event, newName, newScore);
+        changeFormMode();
+    };
 
     // --- Component content ---      
     return (
-        <Form onSubmit={(event) => addScore(event, newName, newScore)}>
+        <Form onSubmit={handleButtonClick}>
             <Form.Row>
                 <Form.Group>
                     <Col>
