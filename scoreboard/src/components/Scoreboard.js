@@ -4,6 +4,7 @@ import EntryRow from '../components/EntryRow';
 import AddScoreButton from '../components/AddScoreButton';
 
 import scoreboardService from '../services/scoreboardService';
+import PagingBar from './PagingBar';
 
 
 const Scoreboard = ({
@@ -14,7 +15,10 @@ const Scoreboard = ({
 
   // --- States ---
   const [ scores, setScores] = useState([]);
-
+  
+  // Pagination related states
+  const [ boardFirstIndex, setBoardFirstIndex] = useState(0);
+  const [ itemsPerBoard, setItemsPerBoard] = useState(5); // TODO: changeable?
 
   // --- Effect handlers ---
   useEffect(() => {
@@ -26,7 +30,7 @@ const Scoreboard = ({
       })
   }, []);
   console.log('render', scores.length, 'scores');
-
+  
 
   // --- Component content ---  
   return (
@@ -45,11 +49,13 @@ const Scoreboard = ({
           </thead>
           <tbody>
 
-            {scores.map((entry, idx) => (
+            {scores
+              .slice(boardFirstIndex, boardFirstIndex + itemsPerBoard)
+              .map((entry, idx) => (
               <EntryRow 
                 key={idx}
                 columns={[
-                  idx+1, 
+                  idx + boardFirstIndex + 1,
                   entry.name, 
                   entry.score
                 ]}
@@ -64,6 +70,12 @@ const Scoreboard = ({
 
           </tbody>
       </Table>
+
+      <PagingBar 
+        scores={scores}
+        itemsPerPage={itemsPerBoard}
+        setFirstIndex={setBoardFirstIndex} />
+
     </header>
   );
 }

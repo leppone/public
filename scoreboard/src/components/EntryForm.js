@@ -18,13 +18,8 @@ const EntryForm = ({
 
 
     // --- Event handlers ---
-    const handleNameAdd = (event) => {
-        setNewName(event.target.value);
-    };
-    
-    const handleNumberAdd = (event) => {
-        setNewScore(event.target.value);
-    };
+    const handleNameAdd = (event) => setNewName(event.target.value);
+    const handleNumberAdd = (event) => setNewScore(event.target.value);
 
     const handleButtonClick = (event) => {
         addScore(event, newName, newScore);
