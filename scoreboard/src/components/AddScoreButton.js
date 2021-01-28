@@ -47,13 +47,16 @@ const AddScoreButton = ({
             setScores(scoresClone);
             return;
           }
+          else {
+            handleInfoBox(`Issues, ${newName} not added`);
+          }
         });
       }
       catch( error ) {
-        // Continue towards error
+        handleInfoBox(`Server error, ${newName} not added`);
       }
 
-      handleInfoBox(`Issues, ${newName} not added`);
+      // Spinner off when done
       setLoading(false);
   }
 

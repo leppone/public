@@ -13,7 +13,6 @@ const InfoBox = ({
     useEffect(() => {
         // Show message (if exists) after render
         if(infoMessage !== null) {
-            console.log("Show msg: ", infoMessage);
             setShow(true);
 
             setTimeout(() => {
