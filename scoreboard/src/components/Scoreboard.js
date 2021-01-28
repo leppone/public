@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Spinner from 'react-bootstrap/Spinner'
 import Table from 'react-bootstrap/Table';
 import EntryRow from '../components/EntryRow';
 import AddScoreButton from '../components/AddScoreButton';
@@ -14,7 +15,8 @@ const Scoreboard = ({
 }) => {
 
   // --- States ---
-  const [ scores, setScores] = useState([]);
+  const [ loading, setLoading ] = useState(true);
+  const [ scores, setScores ] = useState([]);
   
   // Pagination related states
   const [ boardFirstIndex, setBoardFirstIndex] = useState(0);
@@ -23,19 +25,32 @@ const Scoreboard = ({
   // --- Effect handlers ---
   useEffect(() => {
     // Refresh boardEntries-list through API on render
-    scoreboardService
-      .getAll()
-      .then(response => {
-        setScores(response.data);
-      })
+    try {
+      scoreboardService
+        .getAll()
+        .then(response => {
+          setScores(response.data);
+          setLoading(false);
+        })
+    }
+    catch(error){
+      handleInfoBox(`Unable to receive data from server`);
+    }
   }, []);
   console.log('render', scores.length, 'scores');
   
 
   // --- Component content ---  
   return (
-
+    
     <header className="App-header">
+
+      <div className={loading ? "show" : "hide"}>
+        <Spinner animation="border" role="status" variant="light" >
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      </div>
+
       <Table striped bordered hover variant="dark">
           <thead>
 
@@ -66,6 +81,7 @@ const Scoreboard = ({
                 scores={scores}
                 setScores={setScores}
                 handleInfoBox={handleInfoBox}
+                setLoading={setLoading}
             />
 
           </tbody>

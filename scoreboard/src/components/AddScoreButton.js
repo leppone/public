@@ -12,7 +12,8 @@ const AddScoreButton = ({
   // {handleInfoBox} : feedback for user
   scores, 
   setScores,
-  handleInfoBox
+  handleInfoBox,
+  setLoading
 }) => {
 
   // --- States ---
@@ -24,24 +25,36 @@ const AddScoreButton = ({
     // Prevent default behavior of submit (page reload)
     event.preventDefault();
 
-    scoreboardService
-      .create({ name: newName, score: newScore })
-      .then(response => {
-        handleInfoBox(`Added ${newName}`);
-        
-        // Add new item to sorted scoreboard to correct place 
-        let scoresClone = [...scores];
-        let idxForSplice = scores.findIndex(
-          (item) => Number(item.score) < Number(response.data.score));
-        scoresClone.splice(
-          idxForSplice < 0 ? scores.length : idxForSplice,
-          0,
-          response.data
-        );
-        setScores(scoresClone);
-      });
-  }
+    try {
+      scoreboardService
+        .create({ name: newName, score: newScore })
+        .then(response => {
+          // Check is response ok
+          if( response.status === 200 ) {
+            handleInfoBox(`Added ${newName}`);
+            setLoading(false);
+          
+            // Add new item to sorted scoreboard to correct place 
+            let scoresClone = [...scores];
+            let idxForSplice = scores.findIndex(
+              (item) => Number(item.score) < Number(response.data.score));
+            scoresClone.splice(
+              idxForSplice < 0 ? scores.length : idxForSplice,
+              0,
+              response.data
+            );
+            setScores(scoresClone);
+            return;
+          }
+        });
+      }
+      catch( error ) {
+        // Continue towards error
+      }
 
+      handleInfoBox(`Issues, ${newName} not added`);
+      setLoading(false);
+  }
 
   // --- Component helper functions ---
   // Revert formMode boolean
@@ -68,7 +81,8 @@ const AddScoreButton = ({
                 <td colSpan="3">
                     <EntryForm 
                       addScore={addScore} 
-                      changeFormMode={changeFormMode} />
+                      changeFormMode={changeFormMode}
+                      setLoading={setLoading} />
                 </td>
             </tr>
         }

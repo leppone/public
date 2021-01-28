@@ -9,7 +9,8 @@ const EntryForm = ({
     // {addScore} : event handler for adding score
     // {changeFormMode} : event handler for adding score
     addScore,
-    changeFormMode
+    changeFormMode,
+    setLoading
 }) => {
 
     // --- States ---
@@ -22,6 +23,7 @@ const EntryForm = ({
     const handleNumberAdd = (event) => setNewScore(event.target.value);
 
     const handleButtonClick = (event) => {
+        setLoading(true);
         addScore(event, newName, newScore);
         changeFormMode();
     };
