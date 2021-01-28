@@ -10,6 +10,7 @@ const AddScoreButton = ({
   // {scores} : state for score container
   // {setScores} : setter for state
   // {handleInfoBox} : feedback for user
+  // {setLoading} : loading spinner handler
   scores, 
   setScores,
   handleInfoBox,

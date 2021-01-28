@@ -13,7 +13,6 @@ const App = () => {
     setInfoMessage ( message );
   }
 
-  // TODO: Add some loading spinner on this level!
   return (
     <div className="App">
       <header className="App-header">

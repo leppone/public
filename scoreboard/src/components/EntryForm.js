@@ -8,6 +8,7 @@ const EntryForm = ({
     // Params
     // {addScore} : event handler for adding score
     // {changeFormMode} : event handler for adding score
+    // {setLoading} : loading spinner handler
     addScore,
     changeFormMode,
     setLoading
