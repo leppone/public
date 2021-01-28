@@ -32,6 +32,8 @@ const PagingBar = ({
     );
   } 
 
+  // TODO: paging bar collapsing when too many items
+
   if(items.length <= 1) {
     return null;
   }

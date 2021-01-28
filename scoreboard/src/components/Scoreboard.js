@@ -16,6 +16,7 @@ const Scoreboard = ({
 
   // --- States ---
   const [ loading, setLoading ] = useState(true);
+  // TODO: polling
   const [ scores, setScores ] = useState([]);
   
   // Pagination related states
@@ -36,7 +37,7 @@ const Scoreboard = ({
     catch(error){
       handleInfoBox(`Unable to receive data from server`);
     }
-  }, []);
+  }, [handleInfoBox]);
   console.log('render', scores.length, 'scores');
   
 

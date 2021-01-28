@@ -1,10 +1,15 @@
 const EntryRow = ({columns}) => {
     return (
         <tr>
-            {columns.map((item, idx) =>
-                // TODO: wildcard or restriction for long items
-                <td key={idx}>{item}</td>
-            )}
+            {columns.map((item, idx) => (
+                <td key={idx}>
+                    {item.length > 20 ? 
+                        <span title={item}  >{item.slice(0,20) + " ..."}</span>
+                        : 
+                        item
+                    }
+                </td>
+            ))}
         </tr>
     )
 };
