@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/scoreboard
+Content-Type: application/json
+
+{
+    "name": "Jango Fett",
+    "score": "123"
+}
