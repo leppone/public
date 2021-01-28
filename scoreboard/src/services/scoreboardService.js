@@ -5,12 +5,17 @@ const getAll = () => {
   return axios.get(baseUrl);
 }
 
+const getSize = () => {
+  return axios.get(baseUrl + "/size");
+}
+
 const create = newObject => {
   return axios.post(baseUrl, newObject);
 }
 
 const service = { 
-  getAll, 
+  getAll,
+  getSize, 
   create
 }
 

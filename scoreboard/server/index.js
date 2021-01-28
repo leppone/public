@@ -37,6 +37,12 @@ app.get('/api/scoreboard', (req, res) => {
   res.json(sortedResults);
 })
 
+// GET amount of items in scoreboard
+app.get('/api/scoreboard/size', (req, res) => {
+  const scoreboard = db.get('scoreboard').value();
+  res.json(scoreboard.length);
+})
+
 // POST item to database
 app.post('/api/scoreboard', (req, res) => {
   const body = req.body;

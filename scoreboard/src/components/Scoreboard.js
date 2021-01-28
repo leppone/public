@@ -16,28 +16,55 @@ const Scoreboard = ({
 
   // --- States ---
   const [ loading, setLoading ] = useState(true);
-  // TODO: polling
   const [ scores, setScores ] = useState([]);
   
   // Pagination related states
   const [ boardFirstIndex, setBoardFirstIndex] = useState(0);
-  const [ itemsPerBoard, setItemsPerBoard] = useState(5); // TODO: changeable?
+  // const [ itemsPerBoard, setItemsPerBoard] = useState(5); // TODO: changeable?
+  const itemsPerBoard = 5;
 
-  // --- Effect handlers ---
+  
+  // Get server data to scoreboard
+  const updateScores = () => {
+    // Update & show load spinner
+    setLoading(true);
+    scoreboardService.getAll()
+      .then(res => {
+        if( res.status === 200 ) {
+          setScores(res.data);
+        }
+        setLoading(false);
+      })
+  }
+
+  // --- Effect handler ---
   useEffect(() => {
-    // Refresh boardEntries-list through API on render
     try {
-      scoreboardService
-        .getAll()
-        .then(response => {
-          setScores(response.data);
-          setLoading(false);
-        })
+      // Initiate scores on start
+      if( scores.length === 0 ) {
+        updateScores();
+      }
+
+      // Polling loop
+      const interval = setInterval(() => {
+        scoreboardService.getSize()
+          .then(res => {
+
+            // Update in background if server has updated 
+            if( res.data > scores.length ) {
+              updateScores();
+              handleInfoBox("Scores updated from server!")
+            }
+            
+          })
+      }, 3000);
+      return () => clearInterval(interval);
     }
     catch(error){
-      handleInfoBox(`Unable to receive data from server`);
+      handleInfoBox("Unable to receive data from server");
     }
-  }, [handleInfoBox]);
+  }, [scores, handleInfoBox]);
+
   console.log('render', scores.length, 'scores');
   
 
