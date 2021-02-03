@@ -70,7 +70,7 @@ app.post('/api/scoreboard', (req, res) => {
     .write();
 
   // Send ok response
-  res.json(`${item} added`);
+  res.json(item);
 })
 
 
