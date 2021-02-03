@@ -25,6 +25,7 @@ const generateId = () => {
 
 // GET all items sorted by score
 app.get('/api/scoreboard', (req, res) => {
+  console.log('GET /api/scoreboard called');
   const scoreboard = db.get('scoreboard').value();
 
   // Init scoreboard if empty
@@ -33,7 +34,7 @@ app.get('/api/scoreboard', (req, res) => {
   }
 
   // Sort results by score before returning
-  const sortedResults = scoreboard.sort((a, b) => b.score - a.score)
+  const sortedResults = scoreboard.sort((a, b) => b.score - a.score);
   res.json(sortedResults);
 })
 
@@ -45,11 +46,13 @@ app.get('/api/scoreboard/size', (req, res) => {
 
 // POST item to database
 app.post('/api/scoreboard', (req, res) => {
+  console.log('POST /api/scoreboard called')
   const body = req.body;
 
   // Checking all required items exist
   if (!body.name || !body.score) {
-    return response.status(400).json({ 
+    console.log('Invalid data received')
+    return res.status(400).json({ 
       error: 'Name or score missing'
     })
   }
@@ -67,7 +70,7 @@ app.post('/api/scoreboard', (req, res) => {
     .write();
 
   // Send ok response
-  res.json(item);
+  res.json(`${item} added`);
 })
 
 

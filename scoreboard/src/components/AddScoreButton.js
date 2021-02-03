@@ -26,35 +26,30 @@ const AddScoreButton = ({
     // Prevent default behavior of submit (page reload)
     event.preventDefault();
 
-    try {
-      scoreboardService
-        .create({ name: newName, score: newScore })
-        .then(response => {
-          // Check is response ok
-          if( response.status === 200 ) {
-            handleInfoBox(`Added ${newName}`);
-            setLoading(false);
-          
-            // Add new item to sorted scoreboard to correct place 
-            let scoresClone = [...scores];
-            let idxForSplice = scores.findIndex(
-              (item) => Number(item.score) < Number(response.data.score));
-            scoresClone.splice(
-              idxForSplice < 0 ? scores.length : idxForSplice,
-              0,
-              response.data
-            );
-            setScores(scoresClone);
-            return;
-          }
-          else {
-            handleInfoBox(`Issues, ${newName} not added`);
-          }
-        });
-      }
-      catch( error ) {
-        handleInfoBox(`Server error, ${newName} not added`);
-      }
+    scoreboardService
+      .create({ name: newName, score: newScore })
+      .then(response => {
+        // Check is response ok
+        if( response.status === 200 ) {
+          handleInfoBox(`Added ${newName}`);
+          setLoading(false);
+        
+          // Add new item to sorted scoreboard to correct place 
+          let scoresClone = [...scores];
+          let idxForSplice = scores.findIndex(
+            (item) => Number(item.score) < Number(response.data.score));
+          scoresClone.splice(
+            idxForSplice < 0 ? scores.length : idxForSplice,
+            0,
+            response.data
+          );
+          setScores(scoresClone);
+          return;
+        }
+      })
+      .catch((err) => {
+        handleInfoBox(`Server error, "${newName}" not added`);
+      });
 
       // Spinner off when done
       setLoading(false);
